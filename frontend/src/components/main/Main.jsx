@@ -1,5 +1,6 @@
 import {
   Box,
+  CircularProgress,
   Container,
   Dialog,
   IconButton,
@@ -18,6 +19,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Rating from "@mui/material/Rating";
+import { AnimatePresence, motion } from "framer-motion"
 
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import { Close } from "@mui/icons-material";
@@ -25,7 +27,9 @@ import ProductsDetails from "./ProductsDetails";
 import { useGetproductByNameQuery } from "../../redux/product";
 const Main = () => {
   const handleAlignment = (event, newValue) => {
+    if (newValue !== null) {
     setmyData(newValue);
+    }
   };
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -45,26 +49,42 @@ const Main = () => {
   const [myData, setmyData] = useState(allProductsAPI);
 
   const { data, error, isLoading } = useGetproductByNameQuery(myData);
-  if (data) {
-    console.log(data.data);
-  }
+
+  const [clickProduct, setclickProduct] = useState({});
+
+
+
   if (isLoading) {
     return (
-      <Typography variant="h6" color="initial">
-        Loaaaaaaaaading
-      </Typography>
-    );
+      <Box sx={{ py:11, textAlign:"center" }}>
+      <CircularProgress />
+    </Box>
+  );
   }
   if (error) {
+    console.log(error);
     return (
-      <Typography variant="body1" color="initial">
-        {
-          // @ts-ignore
-          error.message
-        }
-      </Typography>
+      <Container sx={{alignItems:"center"}}>
+        <Typography variant="body1" color="initial">
+          {
+            // @ts-ignore
+            error.error
+          }
+        </Typography>
+      
+      </Container>
     );
   }
+
+
+
+
+
+
+
+
+
+
   if (data) {
     return (
       <Container sx={{ py: 9 }}>
@@ -131,15 +151,23 @@ const Main = () => {
           flexWrap={"wrap"}
           justifyContent={"space-between"}
         >
-          {data.data.map((item) => {
+        
+        <AnimatePresence>
+        {data.data.map((item) => {
             return (
               <Card
-                key={item}
+              component={motion.section}
+              layout
+              initial={{transform:"scale(0)"}}
+              animate={{transform:"scale(1)"}}
+              transition={{duration:1.6, type:"spring", stiffness:50}}
+                key={item.id}
                 sx={{
                   maxWidth: 333,
                   mt: 6,
+                  
                   ":hover .MuiCardMedia-root": {
-                    rotate: "1deg",
+                    rotate: "0.4deg",
                     scale: "1.1",
                     transition: "0.35s",
                   },
@@ -173,7 +201,10 @@ const Main = () => {
 
                 <CardActions sx={{ justifyContent: "space-between" }}>
                   <Button
-                    onClick={handleClickOpen}
+                    onClick={() => {
+                      handleClickOpen()
+                      setclickProduct(item) 
+                    }}
                     sx={{ textTransform: "capitalize" }}
                     size="large"
                   >
@@ -193,6 +224,10 @@ const Main = () => {
               </Card>
             );
           })}
+        </AnimatePresence>
+        
+
+
         </Stack>
 
         <Dialog
@@ -214,7 +249,7 @@ const Main = () => {
             <Close />
           </IconButton>
 
-          <ProductsDetails />
+          <ProductsDetails clickProduct={clickProduct} />
         </Dialog>
       </Container>
     );

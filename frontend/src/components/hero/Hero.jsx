@@ -23,8 +23,8 @@ import { Pagination } from "swiper/modules";
 import IconSection from "./iconSection";
 
 const myslider =[
-  {text:"MEN",link:"src/images/banner-15.jpg"},
-  {text:"WOMEN",link:"src/images/banner-25.jpg"}
+  {text:"MEN",link:"./images/banner-15.jpg"},
+  {text:"WOMEN",link:"./images/banner-25.jpg"}
 
 ]
 const Hero = () => {
@@ -133,7 +133,7 @@ const Hero = () => {
         {/* dans les ecran extra small il n'affiche pas, et dans les ecrans meduim de 600px et plus il s'affiche */}
         <Box>
           <Box sx={{ position: "relative" }}>
-            <img width={"100%"} src="src/images/banner-17.jpg" alt="" />
+            <img width={"100%"} src="./images/banner-17.jpg" alt="" />
             <Stack
               sx={{
                 position: "absolute",
@@ -193,7 +193,7 @@ const Hero = () => {
           </Box>
 
           <Box sx={{ position: "relative" }}>
-            <img width={"100%"} src="src/images/banner-16.jpg" alt="" />
+            <img width={"100%"} src="./images/banner-16.jpg" alt="" />
             <Stack
               sx={{
                 position: "absolute",
